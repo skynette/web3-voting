@@ -31,7 +31,7 @@ const Navbar = () => {
 
     return (
         <header className="bg-background border-b px-4 md:px-6 py-4 flex items-center justify-between">
-            <a href="#" className="flex items-center gap-2">
+            <a href="/" className="flex items-center gap-2">
                 <MountainIcon className="w-6 h-6" />
                 <span className="font-semibold text-lg">Web3 Voting</span>
             </a>

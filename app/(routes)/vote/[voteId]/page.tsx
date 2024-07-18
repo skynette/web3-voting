@@ -1,13 +1,20 @@
+'use client'
+
 import RegisterCandidate from "@/components/register-as-candidate"
 import { Button } from "@/components/ui/button"
+import { useParams } from 'next/navigation'
 
 export default function Vote() {
+    const params = useParams();
+    console.log({ params })
     return (
         <div className="flex flex-col min-h-dvh">
             <main className="flex-1 py-12 px-6 container mx-auto">
-                <div className="mb-12 bg-card rounded-lg shadow-md p-6">
-                    <h2 className="text-xl font-bold mb-4">Total Votes</h2>
-                    <div className="text-4xl font-bold">323</div>
+                <div className="mb-12 bg-card rounded-lg shadow-md p-6 flex items-center justify-between">
+                    <div>
+                        <h2 className="text-xl font-bold mb-4">Total Votes</h2>
+                        <div className="text-4xl font-bold">323</div>
+                    </div>
                     <RegisterCandidate />
                 </div>
 

@@ -1,7 +1,8 @@
+'use client'
 import React from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Card, CardContent } from './ui/card';
-import { Button, buttonVariants } from './ui/button';
+import { buttonVariants } from './ui/button';
 import { useContract, useContractRead } from "@thirdweb-dev/react";
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/lib/constants";
 import { ethers } from 'ethers';
@@ -67,7 +68,7 @@ const Polls = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {isLoading ? (
-                        Array.from({ length: 6 }).map((_, index) => (
+                        Array.from({ length: 8 }).map((_, index) => (
                             <Skeleton key={index} className="w-full h-64" />
                         ))
                     ) : (
