@@ -3,9 +3,9 @@ import { Space_Mono } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import './globals.css'
 import React from 'react'
-// import Providers from './lib/provider'
 import Footer from '@/components/footer'
 import Navbar from '@/components/navbar'
+import ProvideThirdweb from './lib/ThirdwebProvider'
 
 const fontHeading = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -30,13 +30,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           fontBody.variable
         )}
       >
-        {/* <Providers> */}
+        <ProvideThirdweb>
           <main>
             <Navbar />
             {children}
             <Footer />
           </main>
-        {/* </Providers> */}
+        </ProvideThirdweb>
       </body>
     </html>
   )

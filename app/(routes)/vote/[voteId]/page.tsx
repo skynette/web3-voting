@@ -1,3 +1,4 @@
+import RegisterCandidate from "@/components/register-as-candidate"
 import { Button } from "@/components/ui/button"
 
 export default function Vote() {
@@ -7,6 +8,7 @@ export default function Vote() {
                 <div className="mb-12 bg-card rounded-lg shadow-md p-6">
                     <h2 className="text-xl font-bold mb-4">Total Votes</h2>
                     <div className="text-4xl font-bold">323</div>
+                    <RegisterCandidate />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
