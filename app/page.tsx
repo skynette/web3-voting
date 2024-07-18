@@ -28,7 +28,7 @@ export default function Home() {
                     </div>
                 </section>
                 <Polls />
-                <section className="bg-muted py-12 md:py-20 lg:py-24">
+                <section className="bg-muted py-12 md:py-20 lg:py-24" id="works">
                     <div className="container mx-auto px-4 md:px-6">
                         <div className="grid md:grid-cols-2 gap-8">
                             <div>
@@ -69,7 +69,7 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-                <section className="py-12 md:py-20 lg:py-24">
+                <section className="py-12 md:py-20 lg:py-24" id="about">
                     <div className="container mx-auto px-4 md:px-6">
                         <h2 className="text-2xl md:text-3xl font-bold mb-8">About</h2>
                         <div className="grid md:grid-cols-2 gap-8">

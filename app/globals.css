@@ -40,3 +40,7 @@
     @apply font-heading;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}

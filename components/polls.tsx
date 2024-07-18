@@ -1,11 +1,13 @@
-import React from 'react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
-import { Card, CardContent } from './ui/card'
-import { Button } from './ui/button'
-import { useContract, useContractRead } from "@thirdweb-dev/react"
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/lib/constants"
-import { ethers } from 'ethers'
-import { Skeleton } from './ui/skeleton'
+import React from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Card, CardContent } from './ui/card';
+import { Button, buttonVariants } from './ui/button';
+import { useContract, useContractRead } from "@thirdweb-dev/react";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/lib/constants";
+import { ethers } from 'ethers';
+import { Skeleton } from './ui/skeleton';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const Polls = () => {
     const { contract, isLoading: contractLoading, error: contractError } = useContract(
@@ -18,26 +20,27 @@ const Polls = () => {
         [],
     );
 
-    console.log({ pollsData, isLoading, error })
+    console.log({ pollsData, isLoading, error });
 
     const formattedPolls = pollsData?.map((poll: any) => ({
         name: poll[0],
-        active: poll[1],
-        startTime: new Date(ethers.BigNumber.from(poll[2]).toNumber() * 1000),
-        endTime: new Date(ethers.BigNumber.from(poll[3]).toNumber() * 1000),
-        candidates: poll[4],
-        winner: poll[5],
-        highestVotes: ethers.BigNumber.from(poll[6]).toNumber(),
-        totalVotes: ethers.BigNumber.from(poll[7]).toNumber(),
+        imageUrl: poll[1],
+        active: poll[2],
+        startTime: new Date(ethers.BigNumber.from(poll[3]).toNumber() * 1000),
+        endTime: new Date(ethers.BigNumber.from(poll[4]).toNumber() * 1000),
+        candidates: poll[5],
+        winner: poll[6],
+        highestVotes: ethers.BigNumber.from(poll[7]).toNumber(),
+        totalVotes: ethers.BigNumber.from(poll[8]).toNumber(),
     }));
 
-    console.log({ formattedPolls })
+    console.log({ formattedPolls });
 
     return (
-        <section className="py-12 md:py-20 lg:py-24" id="events">
+        <section className="py-12 md:py-20 lg:py-24" id="polls">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-2xl md:text-3xl font-bold">Upcoming Events</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold">Upcoming Polls</h2>
                     <div className="flex items-center gap-4">
                         <Select>
                             <SelectTrigger className="w-[180px]">
@@ -70,13 +73,13 @@ const Polls = () => {
                     ) : (
                         formattedPolls.map((poll: any, index: any) => (
                             <Card key={index}>
-                                <img src="/placeholder.svg" width={400} height={250} alt="Event Thumbnail" className="rounded-t-lg" />
+                                <img src={poll.imageUrl || "https://plus.unsplash.com/premium_photo-1681400678259-255b10890b08?q=80&w=2079&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} width={400} height={250} alt="Event Thumbnail" className="rounded-t-lg" />
                                 <CardContent className="p-4 space-y-2">
                                     <h3 className="text-lg font-semibold">{poll.name}</h3>
                                     <p className="text-muted-foreground">
                                         {poll.active ? 'Active' : 'Inactive'} - Starts: {poll.startTime.toLocaleString()} - Ends: {poll.endTime.toLocaleString()}
                                     </p>
-                                    <Button className="w-full">Vote</Button>
+                                    <Link href={`/vote/${index+1}`} className={cn(buttonVariants({variant: 'default'}), "w-full")}>Vote</Link>
                                 </CardContent>
                             </Card>
                         ))
@@ -84,7 +87,7 @@ const Polls = () => {
                 </div>
             </div>
         </section>
-    )
+    );
 }
 
-export default Polls
+export default Polls;

@@ -1,10 +1,10 @@
 'use client'
 
 import { MountainIcon } from 'lucide-react'
-import Link from 'next/link'
 import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { useMetamask, useAddress, useDisconnect, useWallet } from '@thirdweb-dev/react'
+import { Link as ScrollLink } from 'react-scroll'
 
 const Navbar = () => {
     const connectWallet = useMetamask()
@@ -31,20 +31,35 @@ const Navbar = () => {
 
     return (
         <header className="bg-background border-b px-4 md:px-6 py-4 flex items-center justify-between">
-            <Link href="#" className="flex items-center gap-2" prefetch={false}>
+            <a href="#" className="flex items-center gap-2">
                 <MountainIcon className="w-6 h-6" />
                 <span className="font-semibold text-lg">Web3 Voting</span>
-            </Link>
+            </a>
             <nav className="hidden md:flex items-center gap-6">
-                <Link href="#events" className="text-muted-foreground hover:text-foreground" prefetch={false}>
-                    Events
-                </Link>
-                <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
+                <ScrollLink
+                    to="polls"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer text-muted-foreground hover:text-foreground"
+                >
+                    Polls
+                </ScrollLink>
+                <ScrollLink
+                    to="works"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer text-muted-foreground hover:text-foreground"
+                >
                     How it Works
-                </Link>
-                <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
+                </ScrollLink>
+                <ScrollLink
+                    to="about"
+                    smooth={true}
+                    duration={500}
+                    className="cursor-pointer text-muted-foreground hover:text-foreground"
+                >
                     About
-                </Link>
+                </ScrollLink>
             </nav>
             {address ? (
                 isVerified ? (

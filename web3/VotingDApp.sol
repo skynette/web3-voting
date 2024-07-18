@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 contract VotingDApp {
     struct Poll {
         string name;
+        string imageUrl;
         bool active;
         uint256 startTime;
         uint256 endTime;
@@ -17,6 +18,7 @@ contract VotingDApp {
 
     struct PollDetails {
         string name;
+        string imageUrl;
         bool active;
         uint256 startTime;
         uint256 endTime;
@@ -29,6 +31,7 @@ contract VotingDApp {
     struct Candidate {
         address candidateAddress;
         string name;
+        string imageUrl;
         bool approved;
         uint256 votesReceived;
     }
@@ -50,8 +53,8 @@ contract VotingDApp {
         _;
     }
 
-    event PollCreated(uint256 pollId, string name, uint256 startTime, uint256 endTime);
-    event CandidateRegistered(uint256 pollId, address candidate, string name);
+    event PollCreated(uint256 pollId, string name, string imageUrl, uint256 startTime, uint256 endTime);
+    event CandidateRegistered(uint256 pollId, address candidate, string name, string imageUrl);
     event CandidateApproved(uint256 pollId, address candidate);
     event VoteCasted(uint256 pollId, address voter, address candidate);
     event PollEnded(uint256 pollId, address winner);
@@ -62,32 +65,35 @@ contract VotingDApp {
         owner = msg.sender;
     }
 
-    function createPoll(string memory name, uint256 startTime, uint256 endTime) public onlyOwner {
+    function createPoll(string memory name, string memory imageUrl, uint256 startTime, uint256 endTime) public onlyOwner {
         require(startTime < endTime, "Invalid poll duration");
 
         pollCount++;
         Poll storage poll = polls[pollCount];
         poll.name = name;
+        poll.imageUrl = imageUrl;
         poll.active = false;
         poll.startTime = startTime;
         poll.endTime = endTime;
 
-        emit PollCreated(pollCount, name, startTime, endTime);
+        emit PollCreated(pollCount, name, imageUrl, startTime, endTime);
     }
 
-    function registerAsCandidate(uint256 pollId, string memory candidateName) public pollExists(pollId) {
+    function registerAsCandidate(uint256 pollId, string memory candidateName, string memory imageUrl) public pollExists(pollId) {
         require(polls[pollId].active, "Poll is not active");
+        require(!isCandidateNameTaken(pollId, candidateName), "Candidate name already taken");
 
         pollCandidates[pollId][msg.sender] = Candidate({
             candidateAddress: msg.sender,
             name: candidateName,
+            imageUrl: imageUrl,
             approved: false,
             votesReceived: 0
         });
 
         allCandidates[pollId].push(msg.sender); // Add to all candidates list
 
-        emit CandidateRegistered(pollId, msg.sender, candidateName);
+        emit CandidateRegistered(pollId, msg.sender, candidateName, imageUrl);
     }
 
     function approveCandidate(uint256 pollId, address candidate) public onlyOwner pollExists(pollId) {
@@ -146,6 +152,16 @@ contract VotingDApp {
         return pollCandidates[pollId][candidate].approved;
     }
 
+    function isCandidateNameTaken(uint256 pollId, string memory candidateName) internal view returns (bool) {
+        uint256 candidateCount = allCandidates[pollId].length;
+        for (uint256 i = 0; i < candidateCount; i++) {
+            if (keccak256(abi.encodePacked(pollCandidates[pollId][allCandidates[pollId][i]].name)) == keccak256(abi.encodePacked(candidateName))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function getPollCandidates(uint256 pollId) public view returns (Candidate[] memory) {
         Poll storage poll = polls[pollId];
         uint256 candidateCount = poll.candidates.length;
@@ -165,10 +181,10 @@ contract VotingDApp {
         return candidates;
     }
 
-    function getPollDetails(uint256 pollId) public view returns (string memory name, bool active, uint256 startTime, uint256 endTime, uint256 totalVotes) {
+    function getPollDetails(uint256 pollId) public view returns (string memory name, string memory imageUrl, bool active, uint256 startTime, uint256 endTime, uint256 totalVotes) {
         require(pollId > 0 && pollId <= pollCount, "Poll does not exist");
         Poll storage poll = polls[pollId];
-        return (poll.name, poll.active, poll.startTime, poll.endTime, poll.totalVotes);
+        return (poll.name, poll.imageUrl, poll.active, poll.startTime, poll.endTime, poll.totalVotes);
     }
 
     function getCandidateVotes(uint256 pollId, address candidate) public view returns (uint256 votesReceived) {
@@ -189,6 +205,7 @@ contract VotingDApp {
             Poll storage poll = polls[i];
             allPolls[i - 1] = PollDetails({
                 name: poll.name,
+                imageUrl: poll.imageUrl,
                 active: poll.active,
                 startTime: poll.startTime,
                 endTime: poll.endTime,

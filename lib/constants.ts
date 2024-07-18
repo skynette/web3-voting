@@ -44,6 +44,12 @@ export const CONTRACT_ABI = [
                 "internalType": "string",
                 "name": "name",
                 "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "imageUrl",
+                "type": "string"
             }
         ],
         "name": "CandidateRegistered",
@@ -75,6 +81,12 @@ export const CONTRACT_ABI = [
                 "indexed": false,
                 "internalType": "string",
                 "name": "name",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "imageUrl",
                 "type": "string"
             },
             {
@@ -213,6 +225,11 @@ export const CONTRACT_ABI = [
                 "type": "string"
             },
             {
+                "internalType": "string",
+                "name": "imageUrl",
+                "type": "string"
+            },
+            {
                 "internalType": "uint256",
                 "name": "startTime",
                 "type": "uint256"
@@ -277,6 +294,11 @@ export const CONTRACT_ABI = [
                         "type": "string"
                     },
                     {
+                        "internalType": "string",
+                        "name": "imageUrl",
+                        "type": "string"
+                    },
+                    {
                         "internalType": "bool",
                         "name": "approved",
                         "type": "bool"
@@ -304,6 +326,11 @@ export const CONTRACT_ABI = [
                     {
                         "internalType": "string",
                         "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "imageUrl",
                         "type": "string"
                     },
                     {
@@ -397,6 +424,11 @@ export const CONTRACT_ABI = [
                         "type": "string"
                     },
                     {
+                        "internalType": "string",
+                        "name": "imageUrl",
+                        "type": "string"
+                    },
+                    {
                         "internalType": "bool",
                         "name": "approved",
                         "type": "bool"
@@ -428,6 +460,11 @@ export const CONTRACT_ABI = [
             {
                 "internalType": "string",
                 "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "imageUrl",
                 "type": "string"
             },
             {
@@ -517,6 +554,11 @@ export const CONTRACT_ABI = [
                 "type": "string"
             },
             {
+                "internalType": "string",
+                "name": "imageUrl",
+                "type": "string"
+            },
+            {
                 "internalType": "bool",
                 "name": "approved",
                 "type": "bool"
@@ -556,6 +598,11 @@ export const CONTRACT_ABI = [
             {
                 "internalType": "string",
                 "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "imageUrl",
                 "type": "string"
             },
             {
@@ -602,6 +649,11 @@ export const CONTRACT_ABI = [
             {
                 "internalType": "string",
                 "name": "candidateName",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "imageUrl",
                 "type": "string"
             }
         ],
