@@ -18,8 +18,6 @@ export default function Vote() {
     const owner = process.env.NEXT_PUBLIC_CONTRACT_OWNER;
     const [isAdmin, setIsAdmin] = useState(false);
 
-    console.log({ address, owner, isAdmin })
-
     // get poll details
     const { contract, isLoading: contractLoading, error: contractError } = useContract(
         CONTRACT_ADDRESS,
@@ -89,7 +87,7 @@ export default function Vote() {
                             <div className="text-4xl font-bold">{totalVotes}</div>
                         )}
                     </div>
-                    <RegisterCandidate />
+                    <RegisterCandidate pollId={Number(id)} contract={contract}/>
                 </div>
 
                 <div className="mb-12 bg-card rounded-lg shadow-md p-6">
