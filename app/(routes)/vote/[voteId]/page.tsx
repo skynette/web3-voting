@@ -3,13 +3,22 @@
 import RegisterCandidate from "@/components/register-as-candidate"
 import { Button } from "@/components/ui/button"
 import { useParams } from 'next/navigation'
-import { useContract, useContractRead } from "@thirdweb-dev/react";
+import { useContract, useContractRead, useAddress, useContractWrite } from "@thirdweb-dev/react";
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from "@/lib/constants";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import toast from 'react-hot-toast';
 
 export default function Vote() {
     const params = useParams();
     const id = params.voteId;
+    const address = useAddress();
+
+    const owner = process.env.NEXT_PUBLIC_CONTRACT_OWNER;
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    console.log({ address, owner, isAdmin })
 
     // get poll details
     const { contract, isLoading: contractLoading, error: contractError } = useContract(
@@ -26,22 +35,47 @@ export default function Vote() {
         "getAllCandidates",
         [id],
     );
+    const { mutateAsync: approveCandidateMutate } = useContractWrite(contract, "approveCandidate")
+    const { mutateAsync: voteCandidate } = useContractWrite(contract, "vote")
 
-    // Format poll data
-    const pollTitle = pollData ? pollData[0] : '';
-    const pollImage = pollData ? pollData[1] : '';
-    const totalVotes = pollData ? parseInt(pollData[3].hex, 16) : 0;
+    useEffect(() => {
+        if (address === owner) {
+            setIsAdmin(true);
+        }
+    }, [address]);
 
-    console.log({ pollTitle, pollImage, totalVotes })
+    const totalVotes = !pollLoading ? ethers.BigNumber.from(pollData?.totalVotes?._hex).toString() : 0
 
-    // Format candidates data
-    const candidates = candidatesData ? candidatesData.map((candidate: any[]) => ({
-        address: candidate[0],
-        name: candidate[1],
-        image: candidate[2],
-        voteCount: parseInt(candidate[4].hex, 16),
-        approved: candidate[3],
-    })) : [];
+    // Function to approve a candidate
+    const approveCandidate = async (address: string) => {
+        const notification = toast.loading("Approving candidate")
+
+        try {
+            await approveCandidateMutate({
+                args: [Number(id), address],
+            })
+
+            toast.success("Approval success", { id: notification })
+        }
+        catch (err) {
+            toast.error("something went wrong", { id: notification })
+        }
+    }
+
+    const vote = async (address: string) => {
+        const notification = toast.loading("Casting Vote")
+
+        try {
+            await voteCandidate({
+                args: [Number(id), address],
+            })
+
+            toast.success("Voted successfully", { id: notification })
+        }
+        catch (err) {
+            toast.error("something went wrong", { id: notification })
+        }
+    }
 
     return (
         <div className="flex flex-col min-h-dvh">
@@ -63,11 +97,11 @@ export default function Vote() {
                         {pollLoading ? (
                             <Skeleton className="h-32 w-32 rounded-full" />
                         ) : (
-                            <img src={pollImage} alt={pollTitle} className="h-32 w-32 rounded-full" />
+                            <img src={pollData?.imageUrl} alt={pollData?.title} className="h-32 w-32 rounded-full" />
                         )}
                         <div>
                             <h2 className="text-2xl font-bold">
-                                {pollLoading ? <Skeleton className="h-8 w-64" /> : pollTitle}
+                                {pollLoading ? <Skeleton className="h-8 w-64" /> : pollData?.title}
                             </h2>
                         </div>
                     </div>
@@ -79,18 +113,25 @@ export default function Vote() {
                             <Skeleton key={index} className="h-64 w-full rounded-lg" />
                         ))
                     ) : (
-                        candidates.map((candidate: any, index: any) => (
+                        candidatesData.map((candidate: any, index: number) => (
                             <div
                                 key={index}
                                 className={`bg-card rounded-lg shadow-md p-6 space-y-4 ${candidate.approved ? 'border-green-500' : 'border-red-500'} border-2`}
                             >
                                 <h2 className="text-xl font-bold">{candidate.name}</h2>
-                                <img src={candidate.image} alt={candidate.name} className="h-32 w-full object-cover rounded" />
+                                <img src={candidate.imageUrl} alt={candidate.name} className="h-32 w-full object-cover rounded" />
                                 <div className="flex items-center justify-between">
-                                    <span className="text-lg font-medium">Vote Count: {candidate.voteCount}</span>
-                                    <Button disabled={!candidate.approved} className={`${candidate.approved ? 'bg-green-500 hover:bg-green-700' : 'bg-red-500 cursor-not-allowed'}`}>
-                                        {candidate.approved ? 'Vote' : 'Pending Approval'}
-                                    </Button>
+                                    <span className="text-lg font-medium">Vote Count: {ethers.BigNumber.from(candidate.votesReceived._hex).toString()}</span>
+                                    <div className="flex gap-2">
+                                        <Button disabled={!candidate.approved} onClick={() => vote(candidate.candidateAddress)} className={`${candidate.approved ? 'bg-green-500 hover:bg-green-700' : 'bg-red-500 cursor-not-allowed'}`}>
+                                            {candidate.approved ? 'Vote' : 'Pending Approval'}
+                                        </Button>
+                                        {isAdmin && !candidate.approved && (
+                                            <Button onClick={() => approveCandidate(candidate.candidateAddress)} className="bg-blue-500 hover:bg-blue-700">
+                                                Approve
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ))
