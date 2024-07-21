@@ -1,6 +1,19 @@
 export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 export const CONTRACT_ABI = [
     {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "pollId",
+                "type": "uint256"
+            }
+        ],
+        "name": "activatePoll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "stateMutability": "nonpayable",
         "type": "constructor"
@@ -54,6 +67,60 @@ export const CONTRACT_ABI = [
         ],
         "name": "CandidateRegistered",
         "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "imageUrl",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "startTime",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "endTime",
+                "type": "uint256"
+            }
+        ],
+        "name": "createPoll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "pollId",
+                "type": "uint256"
+            }
+        ],
+        "name": "deactivatePoll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "pollId",
+                "type": "uint256"
+            }
+        ],
+        "name": "endPoll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
     },
     {
         "anonymous": false,
@@ -138,6 +205,47 @@ export const CONTRACT_ABI = [
         "type": "event"
     },
     {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "pollId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "candidateName",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "imageUrl",
+                "type": "string"
+            }
+        ],
+        "name": "registerAsCandidate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "pollId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "candidate",
+                "type": "address"
+            }
+        ],
+        "name": "vote",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "anonymous": false,
         "inputs": [
             {
@@ -166,19 +274,6 @@ export const CONTRACT_ABI = [
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "pollId",
-                "type": "uint256"
-            }
-        ],
-        "name": "activatePoll",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
             },
@@ -197,78 +292,6 @@ export const CONTRACT_ABI = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "pollId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "candidate",
-                "type": "address"
-            }
-        ],
-        "name": "approveCandidate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "imageUrl",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "startTime",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "endTime",
-                "type": "uint256"
-            }
-        ],
-        "name": "createPoll",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "pollId",
-                "type": "uint256"
-            }
-        ],
-        "name": "deactivatePoll",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "pollId",
-                "type": "uint256"
-            }
-        ],
-        "name": "endPoll",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -642,29 +665,6 @@ export const CONTRACT_ABI = [
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "pollId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "candidateName",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "imageUrl",
-                "type": "string"
-            }
-        ],
-        "name": "registerAsCandidate",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -679,24 +679,6 @@ export const CONTRACT_ABI = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "pollId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "candidate",
-                "type": "address"
-            }
-        ],
-        "name": "vote",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     }
 ]

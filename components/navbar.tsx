@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { useMetamask, useAddress, useDisconnect, useWallet } from '@thirdweb-dev/react'
 import { Link as ScrollLink } from 'react-scroll'
+import Link from 'next/link'
 
 const Navbar = () => {
     const connectWallet = useMetamask()
@@ -18,14 +19,13 @@ const Navbar = () => {
                 <span className="font-semibold text-lg">Web3 Voting</span>
             </a>
             <nav className="hidden md:flex items-center gap-6">
-                <ScrollLink
-                    to="polls"
-                    smooth={true}
-                    duration={500}
+                <Link
+                    prefetch={false}
+                    href="/polls"
                     className="cursor-pointer text-muted-foreground hover:text-foreground"
                 >
                     Polls
-                </ScrollLink>
+                </Link>
                 <ScrollLink
                     to="works"
                     smooth={true}

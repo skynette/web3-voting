@@ -21,8 +21,6 @@ const Polls = () => {
         [],
     );
 
-    console.log({ pollsData, isLoading, error });
-
     const formattedPolls = pollsData?.map((poll: any) => ({
         name: poll[0],
         imageUrl: poll[1],
@@ -34,8 +32,6 @@ const Polls = () => {
         highestVotes: ethers.BigNumber.from(poll[7]).toNumber(),
         totalVotes: ethers.BigNumber.from(poll[8]).toNumber(),
     }));
-
-    console.log({ formattedPolls });
 
     return (
         <section className="py-12 md:py-20 lg:py-24" id="polls">
@@ -77,10 +73,17 @@ const Polls = () => {
                                 <img src={poll.imageUrl || "https://plus.unsplash.com/premium_photo-1681400678259-255b10890b08?q=80&w=2079&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} width={400} height={250} alt="Event Thumbnail" className="rounded-t-lg" />
                                 <CardContent className="p-4 space-y-2">
                                     <h3 className="text-lg font-semibold">{poll.name}</h3>
-                                    <p className="text-muted-foreground">
-                                        {poll.active ? 'Active' : 'Inactive'} - Starts: {poll.startTime.toLocaleString()} - Ends: {poll.endTime.toLocaleString()}
+                                    <p
+                                        className={`${poll.active ? 'bg-green-600 text-white' : 'text-white bg-red-500'
+                                            } text-muted-foreground bg-primary w-fit p-2`}
+                                    >
+                                        {poll.active ? 'Active' : 'Inactive'}
                                     </p>
-                                    <Link href={`/vote/${index+1}`} className={cn(buttonVariants({variant: 'default'}), "w-full")}>Vote</Link>
+
+                                    <p className="text-muted-foreground">
+                                         Starts: {poll.startTime.toLocaleString()} - Ends: {poll.endTime.toLocaleString()}
+                                    </p>
+                                    <Link href={`/vote/${index + 1}`} className={cn(buttonVariants({ variant: 'default' }), "w-full")}>Participate</Link>
                                 </CardContent>
                             </Card>
                         ))

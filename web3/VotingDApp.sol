@@ -80,7 +80,7 @@ contract VotingDApp {
     }
 
     function registerAsCandidate(uint256 pollId, string memory candidateName, string memory imageUrl) public pollExists(pollId) {
-        require(polls[pollId].active, "Poll is not active");
+        require(pollCandidates[pollId][msg.sender].candidateAddress == address(0), "Already registered as a candidate");
         require(!isCandidateNameTaken(pollId, candidateName), "Candidate name already taken");
 
         pollCandidates[pollId][msg.sender] = Candidate({
@@ -94,15 +94,6 @@ contract VotingDApp {
         allCandidates[pollId].push(msg.sender); // Add to all candidates list
 
         emit CandidateRegistered(pollId, msg.sender, candidateName, imageUrl);
-    }
-
-    function approveCandidate(uint256 pollId, address candidate) public onlyOwner pollExists(pollId) {
-        require(pollCandidates[pollId][candidate].candidateAddress == candidate, "Candidate not registered");
-
-        pollCandidates[pollId][candidate].approved = true;
-        polls[pollId].candidates.push(candidate);
-
-        emit CandidateApproved(pollId, candidate);
     }
 
     function vote(uint256 pollId, address candidate) public {

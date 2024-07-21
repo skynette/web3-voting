@@ -120,7 +120,7 @@ export default function Vote() {
                                 <img src={candidate.imageUrl} alt={candidate.name} className="h-32 w-full object-cover rounded" />
                                 <div className="flex items-center justify-between">
                                     <span className="text-lg font-medium">Vote Count: {ethers.BigNumber.from(candidate.votesReceived._hex).toString()}</span>
-                                    <div className="flex gap-2">
+                                    <div className="flex-col md:flex-row gap-2 space-x-4 space-y-4">
                                         <Button disabled={!candidate.approved} onClick={() => vote(candidate.candidateAddress)} className={`${candidate.approved ? 'bg-green-500 hover:bg-green-700' : 'bg-red-500 cursor-not-allowed'}`}>
                                             {candidate.approved ? 'Vote' : 'Pending Approval'}
                                         </Button>
