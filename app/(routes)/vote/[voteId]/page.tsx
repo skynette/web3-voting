@@ -28,6 +28,7 @@ export default function Vote() {
         "getPollDetails",
         [id],
     );
+    console.log({ pollData })
     const { data: candidatesData, isLoading: candidatesLoading, error: candidatesError } = useContractRead(
         contract,
         "getAllCandidates",
@@ -35,6 +36,7 @@ export default function Vote() {
     );
     const { mutateAsync: approveCandidateMutate } = useContractWrite(contract, "approveCandidate")
     const { mutateAsync: voteCandidate } = useContractWrite(contract, "vote")
+    const { mutateAsync: activatePollMutate } = useContractWrite(contract, "activatePoll")
 
     useEffect(() => {
         if (address === owner) {
@@ -60,6 +62,7 @@ export default function Vote() {
         }
     }
 
+    // Function to vote for a candidate
     const vote = async (address: string) => {
         const notification = toast.loading("Casting Vote")
 
@@ -69,6 +72,22 @@ export default function Vote() {
             })
 
             toast.success("Voted successfully", { id: notification })
+        }
+        catch (err) {
+            toast.error("something went wrong", { id: notification })
+        }
+    }
+
+    // Function to start the poll
+    const activatePoll = async () => {
+        const notification = toast.loading("Starting Poll")
+
+        try {
+            await activatePollMutate({
+                args: [Number(id)],
+            })
+
+            toast.success("Poll started successfully", { id: notification })
         }
         catch (err) {
             toast.error("something went wrong", { id: notification })
@@ -87,7 +106,7 @@ export default function Vote() {
                             <div className="text-4xl font-bold">{totalVotes}</div>
                         )}
                     </div>
-                    <RegisterCandidate pollId={Number(id)} contract={contract}/>
+                    <RegisterCandidate pollId={Number(id)} contract={contract} />
                 </div>
 
                 <div className="mb-12 bg-card rounded-lg shadow-md p-6">
@@ -99,8 +118,15 @@ export default function Vote() {
                         )}
                         <div>
                             <h2 className="text-2xl font-bold">
-                                {pollLoading ? <Skeleton className="h-8 w-64" /> : pollData?.title}
+                                {pollLoading ? <Skeleton className="h-8 w-64" /> : pollData?.name}
                             </h2>
+                            <p>{pollLoading ? <Skeleton className="h-4 w-64" /> : `Start Time: ${new Date(pollData?.startTime * 1000).toLocaleString()}`}</p>
+                            <p>{pollLoading ? <Skeleton className="h-4 w-64" /> : `End Time: ${new Date(pollData?.endTime * 1000).toLocaleString()}`}</p>
+                            {isAdmin && !pollData?.active && (
+                                <Button onClick={activatePoll} className="bg-blue-500 hover:bg-blue-700 mt-4">
+                                    Start Poll
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </div>
