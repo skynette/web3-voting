@@ -14,6 +14,65 @@ export const CONTRACT_ABI = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "pollId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "candidate",
+                "type": "address"
+            }
+        ],
+        "name": "approveCandidate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "imageUrl",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "startTime",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "endTime",
+                "type": "uint256"
+            }
+        ],
+        "name": "createPoll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "pollId",
+                "type": "uint256"
+            }
+        ],
+        "name": "deactivatePoll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "stateMutability": "nonpayable",
         "type": "constructor"
@@ -67,47 +126,6 @@ export const CONTRACT_ABI = [
         ],
         "name": "CandidateRegistered",
         "type": "event"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "name",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "imageUrl",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "startTime",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "endTime",
-                "type": "uint256"
-            }
-        ],
-        "name": "createPoll",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "pollId",
-                "type": "uint256"
-            }
-        ],
-        "name": "deactivatePoll",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
     },
     {
         "inputs": [

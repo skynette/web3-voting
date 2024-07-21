@@ -96,6 +96,15 @@ contract VotingDApp {
         emit CandidateRegistered(pollId, msg.sender, candidateName, imageUrl);
     }
 
+    function approveCandidate(uint256 pollId, address candidate) public onlyOwner pollExists(pollId) {
+        require(pollCandidates[pollId][candidate].candidateAddress != address(0), "Candidate not registered for this poll");
+        require(!pollCandidates[pollId][candidate].approved, "Candidate is already approved");
+
+        pollCandidates[pollId][candidate].approved = true;
+
+        emit CandidateApproved(pollId, candidate);
+    }
+
     function vote(uint256 pollId, address candidate) public {
         Poll storage poll = polls[pollId];
         require(poll.active, "Poll is not active");
